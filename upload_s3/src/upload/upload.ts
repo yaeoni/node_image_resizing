@@ -12,7 +12,7 @@ let upload = multer({
     key: (req, file, cb) => {
       cb(
         null,
-        `test/${Date.now().toString()}${path.extname(file.originalname)}`
+        `original/${Date.now().toString()}${path.extname(file.originalname)}`
       );
     },
   }),
