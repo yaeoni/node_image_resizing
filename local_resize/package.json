@@ -1,0 +1,14 @@
+{
+  "name": "local_resize",
+  "version": "1.0.0",
+  "description": "",
+  "main": "local_resize.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "sharp": "^0.29.1"
+  }
+}
