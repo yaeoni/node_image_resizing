@@ -1,12 +1,15 @@
 const sharp = require("sharp");
 const fs = require("fs");
+const sizeOf = require("image-size");
 
-sharp("테스트 할 파일")
-  .resize(0, 0) // width, height pixel
+const dimensions = sizeOf("test.png");
+
+sharp("test.png")
+  .resize(dimensions.width / 3, dimensions.height / 3) // width, height pixel
   .toFormat("jpeg")
   .toBuffer()
   .then((data) => {
-    fs.writeFileSync("저장될 이름", data);
+    fs.writeFileSync("2.jpeg", data);
   })
   .catch((err) => {
     console.log(err);
