@@ -1,6 +1,7 @@
 const AWS = require("aws-sdk");
 const sharp = require("sharp");
 import { Handler, Context } from "aws-lambda";
+const sizeOf = require("buffer-image-size");
 
 const s3 = new AWS.S3();
 
@@ -12,8 +13,24 @@ export const handler: Handler = async (event: any, context: Context) => {
   try {
     const s3Object = await s3.getObject({ Bucket: Bucket, Key: Key }).promise();
 
+    // buffer 상에서 파일 크기 구하기
+    const kiloBytes = Buffer.byteLength(s3Object.Body as Buffer) / 1024;
+    const dimensions = sizeOf(s3Object.Body as Buffer);
+
+    let newWidth: number;
+    let newHeight: number;
+
+    // 1000KB를 기준으로 저화질 비율 선택
+    if (kiloBytes < 1000) {
+      newWidth = dimensions.width / 2;
+      newHeight = dimensions.height / 2;
+    } else {
+      newWidth = dimensions.width / 3;
+      newHeight = dimensions.height / 3;
+    }
+
     const resizedImage = await sharp(s3Object.Body as Buffer)
-      .resize(200, 200, { fit: "inside" })
+      .resize(newWidth, newHeight)
       .toFormat("jpeg")
       .toBuffer();
 
